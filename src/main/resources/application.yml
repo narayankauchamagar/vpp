@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: vpp
+  profiles:
+    active: ${SPRING_ACTIVE_PROFILE:dev}
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+logging:
+  level:
+    root: debug
