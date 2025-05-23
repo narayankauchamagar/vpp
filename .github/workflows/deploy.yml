@@ -81,7 +81,7 @@ jobs:
           # If you're using a passphrase for your key, uncomment the next line
           # passphrase: ${{ secrets.SSH_PASSPHRASE }}
           source: "./artifact/*.jar"
-          target: "/home/narayan/apps/vpp/vpp.jar"
+          target: "/home/narayan/apps/vpp/"
           strip_components: 1
 
       # Continue with deployment
@@ -98,7 +98,6 @@ jobs:
             # Start services
             sudo systemctl start vpp.service 
            
-
             # Check service status
             echo "Service Status:"
             sudo systemctl status vpp.service | grep Active
