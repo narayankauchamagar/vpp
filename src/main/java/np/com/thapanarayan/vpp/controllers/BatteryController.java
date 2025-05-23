@@ -86,25 +86,12 @@ public class BatteryController {
                     .build());
         }
 
-
         // Call the service to get the data and statistics
-        BatteryServiceResponse response = batteryService.getBatteriesByPostcodeRange(batterySearchRequest.getMinPostcode(), batterySearchRequest.getMaxPostcode());
+        BatterySearchResponse response = batteryService.getBatteriesByPostcodeRange(batterySearchRequest.getMinPostcode(), batterySearchRequest.getMaxPostcode());
 
-        List<BatteryResponseDto> batteriesFetched = batteryMapper.convertToBatteryResponse( response.getBatteries());
-
-        // Calculate statistics
-        double totalWattCapacity = response.getBatteries().stream()
-                .mapToDouble(Battery::getCapacity)
-                .sum();
-        int numBatteries = response.getBatteries().size();
-        double averageWattCapacity = numBatteries > 0 ? totalWattCapacity / numBatteries : 0;
-
-        BatteryStatisticsDto statistics = new BatteryStatisticsDto(totalWattCapacity, averageWattCapacity, numBatteries);
-
-        return ResponseEntity.ok(ServerResponse
-                .<List<BatteryResponseDto>, String>builder()
+        return ResponseEntity.ok(ServerResponse.builder()
                 .message("Batteries fetched successfully")
-                .data(batteriesFetched)
+                .data(response)
                 .build());
     }
 }
