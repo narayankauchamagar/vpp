@@ -1,0 +1,15 @@
+
+[Unit]
+Description=NMDE Service 3
+After=network.target
+
+[Service]
+User=narayan
+WorkingDirectory=/home/narayan/apps/vpp
+ExecStart=/usr/bin/java -jar /home/narayan/apps/vpp.jar --spring.profiles.active=prod
+SuccessExitStatus=143
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

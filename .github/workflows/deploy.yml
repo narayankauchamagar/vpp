@@ -1,0 +1,104 @@
+name: Build and Deploy JAR
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'  # Choose your Java version
+          distribution: 'temurin'  # Choose your distribution
+          cache: maven  # Or gradle if using Gradle
+
+      - name: Build with Maven
+        run: mvn -B package --file pom.xml
+        # For Gradle, use: ./gradlew build
+
+      - name: List target files
+        run: ls -l target/
+
+      - name: Upload JAR artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-jar
+          path: target/*.jar  # For Maven
+          # For Gradle: path: build/libs/*.jar
+
+  deploy:
+    needs: build  # This job depends on the build job
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download JAR artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: app-jar
+          path: ./artifact
+
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.8.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Add server to known hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
+
+      # Changed SSH setup to use appleboy/ssh-action which is more reliable
+      - name: Deploy to server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          # If you're using a passphrase for your key, uncomment the next line
+          # passphrase: ${{ secrets.SSH_PASSPHRASE }}
+          script: |
+            # Debug info
+            echo "Connected to server as $(whoami)"
+      
+            # Stop services
+            sudo systemctl stop vpp.service
+
+      # Now use scp separately to upload the file
+      - name: Upload JAR file
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          # If you're using a passphrase for your key, uncomment the next line
+          # passphrase: ${{ secrets.SSH_PASSPHRASE }}
+          source: "./artifact/*.jar"
+          target: "/home/narayan/apps/vpp.jar"
+          strip_components: 1
+
+      # Continue with deployment
+      - name: Complete deployment
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          # If you're using a passphrase for your key, uncomment the next line
+          # passphrase: ${{ secrets.SSH_PASSPHRASE }}
+          script: |
+            
+            # Start services
+            sudo systemctl start vpp.service 
+           
+
+            # Check service status
+            echo "Service Status:"
+            sudo systemctl status vpp.service | grep Active
