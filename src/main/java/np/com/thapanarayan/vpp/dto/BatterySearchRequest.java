@@ -1,7 +1,6 @@
 package np.com.thapanarayan.vpp.dto;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,13 +9,18 @@ import java.io.Serializable;
 @Getter
 @Setter
 public class BatterySearchRequest implements Serializable {
-    @NotBlank(message = "Min-Postcode is required")
-    @Size(min = 4, max= 4, message = "Postcode should be 4 characters") // as per sample format
-    private Integer minPostcode;
-    @NotBlank(message = "Max-Postcode is required")
-    @Size(min = 4, max= 4, message = "Postcode should be 4 characters") // as per sample format
-    private Integer maxPostcode;
+
+    @Size(min = 1, message = "Min-Postcode must be at least 1 digits")
+    @NotNull(message = "Min-Postcode is required")
+    private String minPostcode;
+
+    @NotNull(message = "Max-Postcode is required")
+    @Size(min = 1, message = "Max-Postcode must be at least 1 digits")
+    private String maxPostcode;
+
+    @Positive(message = "Min Watt Capacity should be positive number")
     private Long minWattCapacity;
+    @Positive(message = "Max-Watt Capacity should be positive number")
     private Long maxWattCapacity;
 
 }

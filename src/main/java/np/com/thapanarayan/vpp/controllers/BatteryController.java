@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import np.com.thapanarayan.vpp.dto.*;
 import np.com.thapanarayan.vpp.entity.Battery;
@@ -31,7 +32,7 @@ public class BatteryController {
             @ApiResponse(responseCode = "200", description = "Batteries saved successfully",
                     content = @Content(schema = @Schema(example = SchemaConstants.BATTERY_RESPONSE_DTO)))
     })
-    public ResponseEntity<ServerResponse<?, ?>> battery(@RequestBody List<BatteryRequestDto> batteryRequestDtos) {
+    public ResponseEntity<ServerResponse<?, ?>> battery(@RequestBody @Valid List<BatteryRequestDto> batteryRequestDtos) {
 
         List<Battery> batteries = batteryMapper.convertToBatteries(batteryRequestDtos);
 
@@ -72,26 +73,22 @@ public class BatteryController {
             @ApiResponse(responseCode = "400", description = "Batteries Fetched successfully",
                     content = @Content(schema = @Schema(example = SchemaConstants.BATTERY_SEARCH_RESPONSE_BAD_REQUEST)))
     })
-    public ResponseEntity<?> getBatteries(@RequestBody BatterySearchRequest batterySearchRequest) {
+    public ResponseEntity<?> getBatteries(@RequestBody @Valid BatterySearchRequest batterySearchRequest) {
 
-        if (batterySearchRequest.getMinPostcode() > batterySearchRequest.getMaxPostcode()) {
+        if (Long.parseLong(batterySearchRequest.getMinPostcode()) > Long.parseLong(batterySearchRequest.getMaxPostcode())) {
             ErrorResponse<?> errorResponse = ErrorResponse.builder()
                     .message("Invalid postcode range: min_postcode cannot be greater than max_postcode.")
                     .build();
 
-            return ResponseEntity.badRequest()
-                    .body(ServerResponse.builder()
-                    .message("Invalid Request")
-                    .error(errorResponse)
-                    .build());
+            return ResponseEntity
+                    .badRequest()
+                    .body(ServerResponse.builder().message("Invalid Request").error(errorResponse).build());
         }
 
         // Call the service to get the data and statistics
         BatterySearchResponse response = batteryService.getBatteriesByPostcodeRange(batterySearchRequest);
 
-        return ResponseEntity.ok(ServerResponse.builder()
-                .message("Batteries fetched successfully")
-                .data(response)
-                .build());
+        return ResponseEntity
+                .ok(ServerResponse.builder().message("Batteries fetched successfully").data(response).build());
     }
 }

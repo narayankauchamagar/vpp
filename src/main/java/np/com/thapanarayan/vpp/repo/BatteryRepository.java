@@ -18,10 +18,10 @@ public interface BatteryRepository extends JpaRepository<Battery, Long>, JpaSpec
     @Query("select battery from Battery battery where battery.postcode = :postcode")
     Optional<Battery> findByPostcode(String postcode);
 
-    @Query("select battery from Battery battery where battery.postcode between :startPostcode and :endPostcode order by battery.name asc")
-    List<Battery> findByPostcodeBetween(Integer startPostcode, Integer endPostcode);
+    @Query("select battery from Battery battery where battery.postcode  between  :startPostcode  and :endPostcode order by battery.name asc")
+    List<Battery> findByPostcodeBetween(String startPostcode, String endPostcode);
 
     @Query("select battery from Battery battery where battery.postcode between :startPostcode and :endPostcode AND battery.capacity between :minCapacity and :maxCapacity order by battery.name asc")
-    List<Battery> findByPostcodeBetweenAndCapacityBetween(Integer startPostcode, Integer endPostcode, Long minCapacity, Long maxCapacity);
+    List<Battery> findByPostcodeBetweenAndCapacityBetween(String startPostcode, String endPostcode, Long minCapacity, Long maxCapacity);
 
 }

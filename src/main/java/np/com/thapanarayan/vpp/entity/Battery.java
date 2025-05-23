@@ -24,7 +24,7 @@ public class Battery implements Serializable {
     @Column(name = "NAME", length = 100, unique = true)
     private String name;
     @Column(name="POSTCODE", length = 5)
-    private Integer postcode;
+    private String postcode;
     @Column(name = "CAPACITY")
     private Long capacity;
     @Column(name = "ADDED_TIMESTAMP")

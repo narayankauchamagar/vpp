@@ -9,6 +9,11 @@ spring:
       ddl-auto: update
 
 logging:
+  logback:
+    rollingpolicy:
+      file-name-pattern: ${LOG_FILE}.%d{yyyy-MM-dd}.%i.zip
+  file:
+    name: logs/vpp.log
   level:
     root: info
     org.springframework.web: debug
