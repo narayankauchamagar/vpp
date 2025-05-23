@@ -11,6 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @ToString
+@EqualsAndHashCode
 public class BatteryServiceResponse implements Serializable {
     private List<Battery> batteries;
     private List<Battery> duplicatedBatteries;

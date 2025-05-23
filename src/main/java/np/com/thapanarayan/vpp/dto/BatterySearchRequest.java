@@ -1,13 +1,17 @@
 package np.com.thapanarayan.vpp.dto;
 
 import jakarta.validation.constraints.*;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.io.Serializable;
 
 @Getter
 @Setter
+@ToString
+@EqualsAndHashCode
 public class BatterySearchRequest implements Serializable {
 
     @Size(min = 1, message = "Min-Postcode must be at least 1 digits")

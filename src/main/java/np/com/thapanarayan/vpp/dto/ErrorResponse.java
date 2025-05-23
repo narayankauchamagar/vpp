@@ -1,9 +1,6 @@
 package np.com.thapanarayan.vpp.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.io.Serializable;
 
@@ -11,6 +8,8 @@ import java.io.Serializable;
 @Setter
 @AllArgsConstructor
 @Builder
+@ToString
+@EqualsAndHashCode
 public class ErrorResponse<T> implements Serializable {
     private String message;
     private T metadata;

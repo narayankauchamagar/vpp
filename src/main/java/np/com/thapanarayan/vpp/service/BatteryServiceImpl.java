@@ -6,6 +6,7 @@ import np.com.thapanarayan.vpp.entity.Battery;
 import np.com.thapanarayan.vpp.mapper.BatteryMapper;
 import np.com.thapanarayan.vpp.repo.BatteryRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -16,6 +17,7 @@ public class BatteryServiceImpl implements BatteryService {
     private final BatteryRepository batteryRepository;
     private final BatteryMapper batteryMapper;
 
+    @Transactional
     public BatteryServiceResponse saveBatteries(List<Battery> batteries) {
 
         List<Battery> duplicateBatteries = batteries

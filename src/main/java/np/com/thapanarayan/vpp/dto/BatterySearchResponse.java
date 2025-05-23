@@ -9,6 +9,7 @@ import java.util.List;
 @ToString
 @AllArgsConstructor
 @Builder
+@EqualsAndHashCode
 public class BatterySearchResponse {
     private List<BatteryResponseDto> batteries;
     private BatteryStatisticsDto statistics;

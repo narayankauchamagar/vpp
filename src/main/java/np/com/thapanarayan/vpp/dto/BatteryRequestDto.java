@@ -2,13 +2,17 @@ package np.com.thapanarayan.vpp.dto;
 
 
 import jakarta.validation.constraints.*;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.io.Serializable;
 
 @Getter
 @Setter
+@ToString
+@EqualsAndHashCode
 public class BatteryRequestDto implements Serializable {
 
     @NotBlank(message = "Battery Name is required")

@@ -1,9 +1,6 @@
 package np.com.thapanarayan.vpp.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.io.Serializable;
 import java.time.Instant;
@@ -12,6 +9,8 @@ import java.time.Instant;
 @Setter
 @AllArgsConstructor
 @Builder
+@ToString
+@EqualsAndHashCode
 public class BatteryResponseDto implements Serializable {
     private Long id;
     private String name;

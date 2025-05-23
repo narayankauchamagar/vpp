@@ -35,9 +35,7 @@ public class BatteryController {
     public ResponseEntity<ServerResponse<?, ?>> battery(@RequestBody @Valid List<BatteryRequestDto> batteryRequestDtos) {
 
         List<Battery> batteries = batteryMapper.convertToBatteries(batteryRequestDtos);
-
         BatteryServiceResponse batteryServiceResponse = batteryService.saveBatteries(batteries);
-
         if (!batteryServiceResponse.getDuplicatedBatteries().isEmpty()) {
             ErrorResponse<List<BatteryResponseDto>> errorResponse = ErrorResponse.<List<BatteryResponseDto>>builder()
                     .message("Duplicate Batteries Found")
@@ -84,10 +82,7 @@ public class BatteryController {
                     .badRequest()
                     .body(ServerResponse.builder().message("Invalid Request").error(errorResponse).build());
         }
-
-        // Call the service to get the data and statistics
         BatterySearchResponse response = batteryService.getBatteriesByPostcodeRange(batterySearchRequest);
-
         return ResponseEntity
                 .ok(ServerResponse.builder().message("Batteries fetched successfully").data(response).build());
     }

@@ -1,12 +1,12 @@
 package np.com.thapanarayan.vpp.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @AllArgsConstructor
+@ToString
+@EqualsAndHashCode
 public class BatteryStatisticsDto {
 
     private double totalWattCapacity;
