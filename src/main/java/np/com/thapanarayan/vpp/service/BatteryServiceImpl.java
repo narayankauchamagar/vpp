@@ -1,10 +1,7 @@
 package np.com.thapanarayan.vpp.service;
 
 import lombok.RequiredArgsConstructor;
-import np.com.thapanarayan.vpp.dto.BatteryResponseDto;
-import np.com.thapanarayan.vpp.dto.BatterySearchResponse;
-import np.com.thapanarayan.vpp.dto.BatteryServiceResponse;
-import np.com.thapanarayan.vpp.dto.BatteryStatisticsDto;
+import np.com.thapanarayan.vpp.dto.*;
 import np.com.thapanarayan.vpp.entity.Battery;
 import np.com.thapanarayan.vpp.mapper.BatteryMapper;
 import np.com.thapanarayan.vpp.repo.BatteryRepository;
@@ -41,9 +38,13 @@ public class BatteryServiceImpl implements BatteryService {
     }
 
     @Override
-    public BatterySearchResponse getBatteriesByPostcodeRange(Integer startPostcode, Integer endPostcode) {
-
-        List<Battery> batteryList=  batteryRepository.findByPostcodeBetween(startPostcode, endPostcode);
+    public BatterySearchResponse getBatteriesByPostcodeRange(BatterySearchRequest request) {
+        List<Battery> batteryList;
+        if (request.getMinWattCapacity() != null || request.getMaxWattCapacity() != null) {
+           batteryList = batteryRepository.findByPostcodeBetweenAndCapacityBetween(request.getMinPostcode(), request.getMaxPostcode(), request.getMinWattCapacity(), request.getMaxWattCapacity());
+        } else {
+            batteryList= batteryRepository.findByPostcodeBetween(request.getMinPostcode(), request.getMaxPostcode());
+        }
 
         List<BatteryResponseDto> batteriesFetched = batteryMapper.convertToBatteryResponse( batteryList);
 

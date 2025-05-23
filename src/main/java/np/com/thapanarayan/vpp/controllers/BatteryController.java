@@ -87,7 +87,7 @@ public class BatteryController {
         }
 
         // Call the service to get the data and statistics
-        BatterySearchResponse response = batteryService.getBatteriesByPostcodeRange(batterySearchRequest.getMinPostcode(), batterySearchRequest.getMaxPostcode());
+        BatterySearchResponse response = batteryService.getBatteriesByPostcodeRange(batterySearchRequest);
 
         return ResponseEntity.ok(ServerResponse.builder()
                 .message("Batteries fetched successfully")

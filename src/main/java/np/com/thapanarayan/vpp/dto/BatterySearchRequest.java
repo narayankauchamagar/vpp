@@ -16,4 +16,7 @@ public class BatterySearchRequest implements Serializable {
     @NotBlank(message = "Max-Postcode is required")
     @Size(min = 4, max= 4, message = "Postcode should be 4 characters") // as per sample format
     private Integer maxPostcode;
+    private Long minWattCapacity;
+    private Long maxWattCapacity;
+
 }
