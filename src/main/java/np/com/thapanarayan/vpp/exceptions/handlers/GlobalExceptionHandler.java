@@ -2,6 +2,7 @@ package np.com.thapanarayan.vpp.exceptions.handlers;
 
 
 import jakarta.servlet.http.HttpServletRequest;
+import np.com.thapanarayan.vpp.dto.ErrorResponse;
 import np.com.thapanarayan.vpp.dto.ServerResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
@@ -65,6 +66,15 @@ public class GlobalExceptionHandler {
             }
         }
         return new ResponseEntity<>(buildErrorResponse("Invalid Request - missing data in list", errorMap), BAD_REQUEST);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<?> handleAllException(Exception ex, HttpServletRequest request) {
+        ErrorResponse<String> errorResponse = ErrorResponse.<String>builder()
+                .message("Some error occurred")
+                .metadata(ex.getMessage())
+                .build();
+        return new ResponseEntity<>(buildErrorResponse("Invalid request", errorResponse ), BAD_REQUEST);
     }
 
     private void collectFieldErrors(Map<String, List<String>> errorMap, FieldError fieldError) {

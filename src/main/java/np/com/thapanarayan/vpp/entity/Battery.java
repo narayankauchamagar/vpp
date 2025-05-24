@@ -23,7 +23,7 @@ public class Battery implements Serializable {
     private Long id;
     @Column(name = "NAME", length = 100, unique = true)
     private String name;
-    @Column(name="POSTCODE", length = 5)
+    @Column(name="POSTCODE", length = 10)
     private String postcode;
     @Column(name = "CAPACITY")
     private Long capacity;
